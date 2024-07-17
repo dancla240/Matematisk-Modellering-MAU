@@ -36,10 +36,15 @@ print(T_100) #1041.7
 L = np.array([15.5, 26, 40, 46, 63, 86.5, 107.5, 124]) #pendel längd cm
 T = np.array([0.7893, 0.9767, 1.257, 1.341, 1.572, 1.837, 2.054, 2.183]) #pendeltid s
 
-def modellfunktion(L):
-    return a_0 * L**a_1
+def modellfunktion(L, a):
+    """Returnerar T sfa L, baserat på a"""
+    return a[0] * L**a[1]
 
-def res():
+def res(a, T, L):
+    return T - modellfunktion(L, a)
     
-a0 = [0.2, 0.5]     #startgissning
+a0 = [0.3, 0.6]     #startgissning
 a, q = opt.leastsq(res, a0, (T, L))
+print('Parametrar', a)
+
+# %%
