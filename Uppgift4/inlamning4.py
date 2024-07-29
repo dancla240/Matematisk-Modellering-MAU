@@ -3,25 +3,25 @@
 Inlämning 4
 @author: danie
 namn: Daniel Claesson
-YouTube länk: 
+YouTube länk: https://youtu.be/etbBWa_B-g0
 """
 #%%
 import numpy as np
 import numpy.polynomial.polynomial as pol
 import matplotlib.pyplot as plt
 import scipy.optimize as opt
-#%% Uppgift 1a
-T = np.array([20.5, 32.7, 51.0, 73.2, 95.7])
-R = np.array([765, 826, 873, 942, 1032])
+#%% Uppgift 1a, plotta som ringar
+T = np.array([20.5, 32.7, 51.0, 73.2, 95.7]) # Temperatur
+R = np.array([765, 826, 873, 942, 1032])    # Resistans
 
 fig, ax = plt.subplots()
 ax.plot(T, R, 'o')
 #%% Uppgift 1b, linjär anpassning till mätdatan (1a ordningen)
-fit = pol.polyfit(T, R, 1)
+fit = pol.polyfit(T, R, 1)  # första gradens polynom anpassning
 print(fit) # offset=702.17, slope=3.949
-m = fit[0]
-k = fit[1]
-x = np.arange(10,110)
+m = fit[0]  # offset
+k = fit[1]  # lutning
+x = np.arange(10,110)   # Return evenly spaced values within a given interval
 y = k * x + m
 
 fig, ax = plt.subplots()
@@ -47,7 +47,7 @@ def residual(a, T, L):
     return T - modellfunktion(L, a)
     
 a0 = [1, 1]     #startgissning
-a, q = opt.leastsq(residual, a0, (T, L))
+a, q = opt.leastsq(residual, a0, (T, L))    #minimerar residualen mha least squares
 print(f'Parametrar: a0={a[0]:.4f}, a1={a[1]:.4f}')
 
 #%% Uppgift 2b, plotta mätdata och modelldata.
@@ -65,7 +65,7 @@ ax.set_title('Uppgift 2, Pendel')
 # sidan 166-167 för inspiration
 f = lambda x : a[0]*x**a[1] # f(x)=a0*L**a1
 g = lambda x : f(x) - 1     # g(x) = f(x) - 1
-r = opt.root(g,1)
+r = opt.root(g,1)   # startgissning = 1
 print(f'Längden L (cm) som ger tiden T 1s: {r.x}') # 25.7 cm
 #%% Uppgift 3a, plottar datan
 S = np.array([1.5, 2, 3, 4, 8]) #Koncentration, mol
@@ -99,16 +99,17 @@ ax.set_xlim(xmin=0)
 ax.set_ylim(ymin=0)
 ax.plot(x, y, '#FFA500')
 # %% Uppgift 4a, plotta innehållet i population.txt
-data = np.loadtxt('population.txt') #läser in populationsdatan
+path = r'C:/Users/danie/Documents/GitHub/Matematisk-Modellering-MAU/Uppgift4/population.txt'
+data = np.loadtxt(path)
 x = np.linspace(0,len(data),len(data))
 
 fig, ax = plt.subplots()
 ax.plot(x, data)
 ax.set_xlabel('År, baseline 1951')
 ax.set_ylabel('Population, miljarder')
-# %%Uppgift 4b
+# %%Uppgift 4b, anpassa en exponentialfunktion till datan
 def modellfunktion(a, x):
-    return a[0] * np.exp(a[1] * x)
+    return a[0] * np.exp(a[1] * x) # returnerar population sfa tid (x)
 
 def residual(a, x, data):
     return data - modellfunktion(a, x)
@@ -126,3 +127,4 @@ ax.plot(x, data, 'b--')
 ax.set_xlabel('År, baseline 1951')
 ax.set_ylabel('Population, miljarder')
 ax.plot(x2, y2, '#FFA500')
+#%% Uppgift 4c, när är befolkningen > 15 miljarder? Zooma i grafen
